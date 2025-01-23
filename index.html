@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bay AI - Cyberpunk</title>
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: #0ff;
+      font-family: 'Courier New', monospace;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .cyberpunk-header {
+      text-align: center;
+      font-size: 3rem;
+      color: #ff00ff;
+      text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+      animation: glitch 2s infinite;
+      margin: 20px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cyberpunk-header::before, .cyberpunk-header::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: none;
+      overflow: hidden;
+    }
+
+    .cyberpunk-header::before {
+      left: -2px;
+      text-shadow: -2px 0 cyan;
+      animation: glitch-skew 2s infinite linear;
+    }
+
+    .cyberpunk-header::after {
+      left: 2px;
+      text-shadow: -2px 0 magenta;
+      animation: glitch-skew 2s infinite linear alternate;
+    }
+
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      margin: 0 auto;
+      max-width: 600px;
+      background: rgba(26, 26, 26, 0.9);
+      border-radius: 15px;
+      box-shadow: 0 0 15px #ff00ff;
+      position: relative;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #0ff;
+      border: 2px solid #ff00ff;
+      padding: 10px;
+      margin-bottom: 20px;
+      font-family: 'Courier New', monospace;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ff00ff;
+      transition: 0.3s ease;
+      position: relative;
+    }
+
+    textarea:focus {
+      outline: none;
+      box-shadow: 0 0 20px #ff00ff;
+    }
+
+    textarea::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 100%;
+      background: linear-gradient(90deg, #ff00ff, #0ff);
+      animation: scanner 3s infinite;
+    }
+
+    button {
+      background: linear-gradient(90deg, #ff00ff, #0ff);
+      color: #0d0d0d;
+      border: none;
+      padding: 15px 25px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 30px;
+      box-shadow: 0 0 15px #ff00ff;
+      transition: transform 0.2s ease, box-shadow 0.3s ease-in-out;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px #0ff;
+    }
+
+    #response-container {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      color: #0ff;
+      border: 2px solid #0ff;
+      padding: 15px;
+      margin-top: 10px;
+      min-height: 50px;
+      white-space: pre-wrap;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #0ff;
+      animation: fadeIn 1s ease;
+      overflow-y: auto;
+    }
+
+    .particle {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: radial-gradient(circle, #ff00ff, transparent);
+      border-radius: 50%;
+      animation: particle-move 3s infinite ease-in-out;
+    }
+
+    @keyframes glitch {
+      0% {
+        clip-path: inset(20% 0 50% 0);
+        transform: translate(-10px);
+      }
+      20% {
+        clip-path: inset(40% 0 20% 0);
+        transform: translate(10px);
+      }
+      40% {
+        clip-path: inset(10% 0 30% 0);
+        transform: translate(-5px);
+      }
+      60% {
+        clip-path: inset(50% 0 10% 0);
+        transform: translate(5px);
+      }
+      100% {
+        clip-path: inset(20% 0 50% 0);
+        transform: translate(0);
+      }
+    }
+
+    @keyframes glitch-skew {
+      0% {
+        transform: skew(0deg);
+      }
+      50% {
+        transform: skew(-5deg);
+      }
+      100% {
+        transform: skew(0deg);
+      }
+    }
+
+    @keyframes scanner {
+      0% {
+        top: 0%;
+      }
+      50% {
+        top: 100%;
+      }
+      100% {
+        top: 0%;
+      }
+    }
+
+    @keyframes particle-move {
+      0% {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+      }
+      100% {
+        transform: translate3d(50vw, 50vh, 0);
+        opacity: 0;
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      .cyberpunk-header {
+        font-size: 2.5rem;
+      }
+
+      textarea {
+        height: 80px;
+      }
+
+      button {
+        font-size: 1rem;
+        padding: 10px 20px;
+      }
+
+      #response-container {
+        font-size: 0.9rem;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .cyberpunk-header {
+        font-size: 2rem;
+      }
+
+      textarea {
+        height: 70px;
+      }
+
+      button {
+        font-size: 0.8rem;
+        padding: 8px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cyberpunk-header" data-text="Bay AI">Bay AI</div>
+
+  <div class="chat-container">
+    <textarea id="user-input" placeholder="Ask me anything..."></textarea>
+    <button id="ask-btn">Ask</button>
+    <div id="response-container"></div>
+  </div>
+
+  <script>
+    for (let i = 0; i < 50; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      particle.style.top = `${Math.random() * 100}vh`;
+      particle.style.left = `${Math.random() * 100}vw`;
+      particle.style.animationDuration = `${Math.random() * 5 + 2}s`;
+      document.body.appendChild(particle);
+    }
+
+    const API_KEY = "AIzaSyByHZ2pwbbToRzkKmIdzX4G6yCFhcYzNxg";
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+
+    async function askQuestion(question) {
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: question }] }]
+          }),
+        });
+
+        const result = await response.json();
+        return result.candidates[0]?.content?.parts[0]?.text || "No response available.";
+      } catch (error) {
+        console.error("Error fetching response:", error);
+        return "Error: Unable to process your request.";
+      }
+    }
+
+    document.getElementById("ask-btn").addEventListener("click", async () => {
+      const userInput = document.getElementById("user-input").value;
+      const responseContainer = document.getElementById("response-container");
+      responseContainer.textContent = "Processing...";
+
+      const response = await askQuestion(userInput);
+      responseContainer.textContent = response;
+    });
+  </script>
+</body>
+</html>
